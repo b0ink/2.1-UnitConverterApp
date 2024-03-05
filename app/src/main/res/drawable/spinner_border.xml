@@ -10,8 +10,8 @@
             <!-- Customize your background shape here -->
             <gradient
                 android:angle="90"
-                android:startColor="#7B7B7B"
-                android:centerX="0.05"
+                android:startColor="#000000"
+                android:centerX="0.0"
                 android:centerColor="@android:color/transparent" />
         </shape>
     </item>
@@ -24,6 +24,6 @@
         android:width="32dp"
         android:height="32dp"
         android:drawable="@drawable/ic_spinner_caret"
-        android:end="24dp"
+        android:end="12dp"
         android:gravity="end|center_vertical" />
 </layer-list>

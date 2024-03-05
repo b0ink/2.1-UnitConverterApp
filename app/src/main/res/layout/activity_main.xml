@@ -85,8 +85,7 @@
             <EditText
                 android:id="@+id/inputValue"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="0.123..."
@@ -99,6 +98,7 @@
                 android:id="@+id/conversionOptionsInput"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/spinner_border"
                 android:dropDownSelector="@android:drawable/arrow_down_float"
                 android:textAlignment="center" />
@@ -125,12 +125,11 @@
             <EditText
                 android:id="@+id/outputValue"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:width="250dp"
                 android:ems="10"
-                android:inputType="none"
+                android:inputType="text"
                 android:singleLine="true"
                 android:text="0.0"
                 android:textAlignment="center" />
@@ -139,6 +138,7 @@
                 android:id="@+id/conversionOptionsOutput"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
+                android:layout_marginBottom="7dp"
                 android:background="@drawable/spinner_border"
                 android:dropDownSelector="@android:drawable/arrow_down_float"
                 android:textAlignment="center" />
