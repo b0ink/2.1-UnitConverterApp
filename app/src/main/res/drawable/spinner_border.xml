@@ -10,9 +10,9 @@
             <!-- Customize your background shape here -->
             <gradient
                 android:angle="90"
-                android:centerColor="#BC417BA4"
-                android:centerX="0.01"
-                android:startColor="#49FFE4" />
+                android:startColor="#7B7B7B"
+                android:centerX="0.05"
+                android:centerColor="@android:color/transparent" />
         </shape>
     </item>
 

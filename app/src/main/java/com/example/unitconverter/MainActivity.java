@@ -25,7 +25,6 @@ import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout focus;
     TabLayout unitTypeSelector;
     String selectedUnitType;
-    ArrayAdapter<String> adapterLength;
-    ArrayAdapter<String> adapterWeight;
-    ArrayAdapter<String> adapterTemp;
+//    ArrayAdapter<String> adapterLength;
+//    ArrayAdapter<String> adapterWeight;
+//    ArrayAdapter<String> adapterTemp;
 
     ArrayAdapter<String> unitAdapter;
 
-    List<String> unitOptions;
+//    List<String> unitOptions;
 
     public void PopulateUnits(String unitCategory) {
         unitAdapter.clear();

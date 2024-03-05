@@ -72,23 +72,15 @@
             android:orientation="horizontal" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="25dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-
-            <Spinner
-                android:id="@+id/conversionOptionsInput"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:background="@drawable/spinner_border"
-                android:dropDownSelector="@android:drawable/arrow_down_float"
-                />
 
             <EditText
                 android:id="@+id/inputValue"
@@ -97,40 +89,38 @@
                 android:layout_marginTop="25dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Enter value to convert..."
-
+                android:hint="0.123..."
                 android:inputType="numberDecimal"
                 android:minWidth="250dp"
+                android:singleLine="true"
                 android:textAlignment="center" />
+
+            <Spinner
+                android:id="@+id/conversionOptionsInput"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/spinner_border"
+                android:dropDownSelector="@android:drawable/arrow_down_float"
+                android:textAlignment="center" />
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/convertBtn"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
-            android:backgroundTint="#2198D8"
-            android:minWidth="250dp"
-            android:text="Convert"
-            app:cornerRadius="8dp" />
+            android:text="="
+            android:textAlignment="center"
+            android:textSize="34sp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <Spinner
-                android:id="@+id/conversionOptionsOutput"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:background="@drawable/spinner_border"
-                android:dropDownSelector="@android:drawable/arrow_down_float"
-                />
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/outputValue"
@@ -140,11 +130,31 @@
                 android:layout_weight="1"
                 android:width="250dp"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="none"
+                android:singleLine="true"
                 android:text="0.0"
                 android:textAlignment="center" />
 
+            <Spinner
+                android:id="@+id/conversionOptionsOutput"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/spinner_border"
+                android:dropDownSelector="@android:drawable/arrow_down_float"
+                android:textAlignment="center" />
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/convertBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="35dp"
+            android:backgroundTint="#2198D8"
+            android:minWidth="250dp"
+            android:text="Convert"
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 
