@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             unitAdapter.addAll("Celsius", "Fahrenheit", "Kelvin");
         }
         unitAdapter.notifyDataSetChanged();
+        spinnerInputType.setSelection(0);
         spinnerOutputType.setSelection(1);
         selectedUnitType = unitCategory;
     }
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             case "kilograms": grams = value * 1000;break;
             case "pounds": grams = value * 453.592;break;
             case "ounces": grams = value * 28.3495;break;
+            case "ton": grams = value * 907185.8188;break;
             default: grams = value;break;
         }
 
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             case "kilograms": return grams / 1000;
             case "pounds": return grams / 453.592;
             case "ounces": return grams / 28.3495;
+            case "ton": return grams / 907185.8188;
             default: return grams;
         }
     }
