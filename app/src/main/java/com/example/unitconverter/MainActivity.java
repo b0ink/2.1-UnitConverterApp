@@ -2,6 +2,7 @@ package com.example.unitconverter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         spinnerInputType.setSelection(0);
         spinnerOutputType.setSelection(1);
         selectedUnitType = unitCategory;
+        inputText.setText("");
+        outputText.setText("");
+        inputText.requestFocus();
     }
 
     public void InitSpinners() {
@@ -144,6 +148,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public void doConversion(Boolean printErrors){
+        String inputUnit = spinnerInputType.getSelectedItem().toString();
+        String outputUnit = spinnerOutputType.getSelectedItem().toString();
+
+        ArrayList<String> items = new ArrayList<String>();
+        for (int i = 0; i < unitAdapter.getCount(); i++) {
+            items.add(unitAdapter.getItem(i));
+        }
+
+        // Force select input type
+        if (!items.contains(inputUnit)) {
+            spinnerInputType.performClick();
+            if(printErrors) Toast.makeText(MainActivity.this, "Input unit required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Force input unit value
+        String inputValue = inputText.getText().toString();
+        if (inputValue.isEmpty()) {
+            inputText.requestFocus();
+            return;
+        }
+
+        // Force output unit type
+        if (!items.contains(outputUnit)) {
+            spinnerOutputType.performClick();
+            if(printErrors) Toast.makeText(MainActivity.this, "Output unit required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double value = Double.parseDouble(inputValue);
+        double result = 0.0;
+        if(selectedUnitType == "Length"){
+            result = convertLength(inputUnit, outputUnit, value);
+        }else if (selectedUnitType == "Weight"){
+            result = convertWeight(inputUnit, outputUnit, value);
+        }else if (selectedUnitType == "Temperature"){
+            result = convertTemperature(inputUnit, outputUnit, value);
+        }else{
+            Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
+        }
+
+        outputText.setText(Double.toString(result));
+
+        inputText.clearFocus();
+        outputText.requestFocus();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,57 +213,32 @@ public class MainActivity extends AppCompatActivity {
 
         convertBtn = findViewById(R.id.convertBtn);
 
+        spinnerInputType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                doConversion(false);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
+
+        spinnerOutputType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                doConversion(true);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
 
         convertBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 // Handle button click
-                String inputUnit = spinnerInputType.getSelectedItem().toString();
-                String outputUnit = spinnerOutputType.getSelectedItem().toString();
-
-                ArrayList<String> items = new ArrayList<String>();
-                for (int i = 0; i < unitAdapter.getCount(); i++) {
-                    items.add(unitAdapter.getItem(i));
-                }
-
-                // Force select input type
-                if (!items.contains(inputUnit)) {
-                    spinnerInputType.performClick();
-                    Toast.makeText(MainActivity.this, "Input unit required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Force input unit value
-                String inputValue = inputText.getText().toString();
-                if (inputValue.isEmpty()) {
-                    inputText.requestFocus();
-                    return;
-                }
-
-                // Force output unit type
-                if (!items.contains(outputUnit)) {
-                    spinnerOutputType.performClick();
-                    Toast.makeText(MainActivity.this, "Output unit required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                double value = Double.parseDouble(inputValue);
-                double result = 0.0;
-                if(selectedUnitType == "Length"){
-                    result = convertLength(inputUnit, outputUnit, value);
-                }else if (selectedUnitType == "Weight"){
-                    result = convertWeight(inputUnit, outputUnit, value);
-                }else if (selectedUnitType == "Temperature"){
-                    result = convertTemperature(inputUnit, outputUnit, value);
-                }else{
-                    Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
-                }
-
-                outputText.setText(Double.toString(result));
-
-                inputText.clearFocus();
-                outputText.requestFocus();
+                doConversion(true);
 //                focus.requestFocus();
             }
         });
