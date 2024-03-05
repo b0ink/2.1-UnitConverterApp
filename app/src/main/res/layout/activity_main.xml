@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DBF3FF"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/UnitTypeTab"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#2198D8"
+        android:textSize="2sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorColor="#FFFFFF"
+        app:tabIndicatorHeight="5dp"
+        app:tabSelectedTextColor="#FFFFFF"
+        app:tabTextColor="#024162">
+
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/Type_Length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Length"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="56dp"
+
+            />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/Type_Weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weight"
+            tools:layout_editor_absoluteX="132dp"
+            tools:layout_editor_absoluteY="39dp" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/Type_Temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/UnitTypeTab">
+
+        <LinearLayout
+            android:id="@+id/focusableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <Spinner
+                android:id="@+id/conversionOptionsInput"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/spinner_border"
+                android:dropDownSelector="@android:drawable/arrow_down_float"
+                />
+
+            <EditText
+                android:id="@+id/inputValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Enter value to convert..."
+
+                android:inputType="numberDecimal"
+                android:minWidth="250dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/convertBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="#2198D8"
+            android:minWidth="250dp"
+            android:text="Convert"
+            app:cornerRadius="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/conversionOptionsOutput"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/spinner_border"
+                android:dropDownSelector="@android:drawable/arrow_down_float"
+                />
+
+            <EditText
+                android:id="@+id/outputValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_weight="1"
+                android:width="250dp"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

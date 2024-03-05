@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingStart="0dp"
+    android:paddingLeft="0dp"
+    android:paddingEnd="48dp"
+    android:paddingRight="0dp"
+    android:paddingMode="stack">
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Customize your background shape here -->
+            <gradient
+                android:angle="90"
+                android:centerColor="#BC417BA4"
+                android:centerX="0.01"
+                android:startColor="#49FFE4" />
+        </shape>
+    </item>
+
+    <item
+        android:width="48dp"
+        android:drawable="@drawable/control_background_40dp_material"
+        android:gravity="end|fill_vertical" />
+    <item
+        android:width="32dp"
+        android:height="32dp"
+        android:drawable="@drawable/ic_spinner_caret"
+        android:end="24dp"
+        android:gravity="end|center_vertical" />
+</layer-list>
