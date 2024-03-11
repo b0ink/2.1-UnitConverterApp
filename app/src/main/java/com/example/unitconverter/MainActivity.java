@@ -65,13 +65,14 @@ public class MainActivity extends AppCompatActivity {
         unitCategories.put("Temperature", tempConversionFactors);
     }
 
-    Spinner spinnerInputType;
-    Spinner spinnerOutputType;
-    Button convertBtn;
-    EditText inputText;
-    EditText outputText;
+    Spinner spnInputUnitType;
+    Spinner spnOutputUnitType;
+    Button btnConvert;
+    EditText etInputValue;
+    EditText etOutputValue;
     LinearLayout focus;
-    TabLayout unitTypeSelector;
+    TabLayout tlUnitCategory;
+
     String selectedUnitType;
 
     ArrayAdapter<String> unitAdapter;
@@ -87,28 +88,28 @@ public class MainActivity extends AppCompatActivity {
         unitAdapter.addAll(unitCategories.get(unitCategory).keySet().toArray(new String[0]));
 
         unitAdapter.notifyDataSetChanged();
-        inputText.setText("");
-        outputText.setText("");
-        spinnerInputType.setSelection(0);
-        spinnerOutputType.setSelection(1);
+        etInputValue.setText("");
+        etOutputValue.setText("");
+        spnInputUnitType.setSelection(0);
+        spnOutputUnitType.setSelection(1);
         selectedUnitType = unitCategory;
 
-        inputText.requestFocus();
+        etInputValue.requestFocus();
     }
 
     public void initSpinners() {
-        spinnerInputType = (Spinner) findViewById(R.id.conversionOptionsInput);
-        spinnerOutputType = (Spinner) findViewById(R.id.conversionOptionsOutput);
+        spnInputUnitType = (Spinner) findViewById(R.id.conversionOptionsInput);
+        spnOutputUnitType = (Spinner) findViewById(R.id.conversionOptionsOutput);
 
-        inputText = findViewById(R.id.inputValue);
-        outputText = findViewById(R.id.outputValue);
+        etInputValue = findViewById(R.id.inputValue);
+        etOutputValue = findViewById(R.id.outputValue);
 
         unitAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
-        spinnerInputType.setAdapter(unitAdapter);
-        spinnerOutputType.setAdapter(unitAdapter);
+        spnInputUnitType.setAdapter(unitAdapter);
+        spnOutputUnitType.setAdapter(unitAdapter);
 
         populateUnits("Length");
 
@@ -153,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void doConversion(Boolean printErrors){
-        String inputUnit = spinnerInputType.getSelectedItem().toString();
-        String outputUnit = spinnerOutputType.getSelectedItem().toString();
+        String inputUnit = spnInputUnitType.getSelectedItem().toString();
+        String outputUnit = spnOutputUnitType.getSelectedItem().toString();
 
         ArrayList<String> items = new ArrayList<String>();
         for (int i = 0; i < unitAdapter.getCount(); i++) {
@@ -163,21 +164,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Force select input type
         if (!items.contains(inputUnit)) {
-            spinnerInputType.performClick();
+            spnInputUnitType.performClick();
             if(printErrors) Toast.makeText(MainActivity.this, "Input unit required", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Force input unit value
-        String inputValue = inputText.getText().toString();
+        String inputValue = etInputValue.getText().toString();
         if (inputValue.isEmpty()) {
-            inputText.requestFocus();
+            etInputValue.requestFocus();
             return;
         }
 
         // Force output unit type
         if (!items.contains(outputUnit)) {
-            spinnerOutputType.performClick();
+            spnOutputUnitType.performClick();
             if(printErrors) Toast.makeText(MainActivity.this, "Output unit required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -187,10 +188,10 @@ public class MainActivity extends AppCompatActivity {
         result = convertFromUnitFactors(unitCategories.get(selectedUnitType), inputUnit, outputUnit, value);
 
         DecimalFormat df = new DecimalFormat("#.#####");
-        outputText.setText(df.format(result));
+        etOutputValue.setText(df.format(result));
 
-        inputText.clearFocus();
-        outputText.requestFocus();
+        etInputValue.clearFocus();
+        etOutputValue.requestFocus();
     }
 
     @Override
@@ -211,15 +212,15 @@ public class MainActivity extends AppCompatActivity {
         focus = findViewById(R.id.focusableLayout);
 
         // Handle conversion on button click
-        convertBtn = findViewById(R.id.convertBtn);
-        convertBtn.setOnClickListener(v -> doConversion(true));
+        btnConvert = findViewById(R.id.convertBtn);
+        btnConvert.setOnClickListener(v -> doConversion(true));
 
         AdapterView.OnItemSelectedListener spinnerItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (parentView == spinnerInputType) {
+                if (parentView == spnInputUnitType) {
                     doConversion(false);
-                } else if (parentView == spinnerOutputType) {
+                } else if (parentView == spnOutputUnitType) {
                     doConversion(true);
                 }
             }
@@ -230,12 +231,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        spinnerInputType.setOnItemSelectedListener(spinnerItemSelectedListener);
-        spinnerOutputType.setOnItemSelectedListener(spinnerItemSelectedListener);
+        spnInputUnitType.setOnItemSelectedListener(spinnerItemSelectedListener);
+        spnOutputUnitType.setOnItemSelectedListener(spinnerItemSelectedListener);
 
 
-        unitTypeSelector = findViewById(R.id.UnitTypeTab);
-        unitTypeSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tlUnitCategory = findViewById(R.id.UnitTypeTab);
+        tlUnitCategory.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 populateUnits((String)tab.getText());
