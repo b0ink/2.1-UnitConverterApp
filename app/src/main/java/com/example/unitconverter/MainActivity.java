@@ -26,9 +26,40 @@ import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Map<String, Double> lengthConversionFactors;
+    private Map<String, Double> weightConversionFactors;
+    private Map<String, Double> tempConversionFactors;
+
+    public void InitConversionData(){
+        lengthConversionFactors = new HashMap<>();
+        lengthConversionFactors.put("Centimetres", 1.0);
+        lengthConversionFactors.put("Metres", 100.0);
+        lengthConversionFactors.put("Kilometres", 100000.0);
+        lengthConversionFactors.put("Inches", 2.54);
+        lengthConversionFactors.put("Feet", 30.48);
+        lengthConversionFactors.put("Yards", 91.44);
+        lengthConversionFactors.put("Miles", 160934.4);
+
+        weightConversionFactors = new HashMap<>();
+        weightConversionFactors.put("Grams", 1.0);
+        weightConversionFactors.put("Kilograms", 1000.0);
+        weightConversionFactors.put("Pounds", 453.592);
+        weightConversionFactors.put("Ton", 907185.8188);
+        weightConversionFactors.put("Ounces", 28.3495);
+
+
+        // temp conversion too complicated to store formula in map
+        tempConversionFactors = new HashMap<>();
+        tempConversionFactors.put("Celsius", 1.0);
+        tempConversionFactors.put("Fahrenheit", 1.0);
+        tempConversionFactors.put("Kelvin", 1.0);
+
+    }
 
     Spinner spinnerInputType;
     Spinner spinnerOutputType;
@@ -38,23 +69,27 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout focus;
     TabLayout unitTypeSelector;
     String selectedUnitType;
-//    ArrayAdapter<String> adapterLength;
-//    ArrayAdapter<String> adapterWeight;
-//    ArrayAdapter<String> adapterTemp;
 
     ArrayAdapter<String> unitAdapter;
 
-//    List<String> unitOptions;
-
     public void PopulateUnits(String unitCategory) {
         unitAdapter.clear();
-        if (unitCategory == "Length") {
-            unitAdapter.addAll("Centimetres", "Metres", "Kilometres", "Inches", "Feet", "Yards", "Miles");
-        } else if (unitCategory == "Weight") {
-            unitAdapter.addAll("Kilograms", "Grams", "Pounds", "Ton");
-        } else if (unitCategory == "Temperature") {
-            unitAdapter.addAll("Celsius", "Fahrenheit", "Kelvin");
+
+        // use conversion map's keys as an array of strings
+        switch (unitCategory) {
+            case "Length":
+                unitAdapter.addAll(lengthConversionFactors.keySet().toArray(new String[0]));
+                break;
+            case "Weight":
+                unitAdapter.addAll(weightConversionFactors.keySet().toArray(new String[0]));
+                break;
+            case "Temperature":
+                unitAdapter.addAll(tempConversionFactors.keySet().toArray(new String[0]));
+                break;
+            default:
+                break;
         }
+
         unitAdapter.notifyDataSetChanged();
         spinnerInputType.setSelection(0);
         spinnerOutputType.setSelection(1);
@@ -67,65 +102,32 @@ public class MainActivity extends AppCompatActivity {
     public void InitSpinners() {
         spinnerInputType = (Spinner) findViewById(R.id.conversionOptionsInput);
         spinnerOutputType = (Spinner) findViewById(R.id.conversionOptionsOutput);
+
         inputText = findViewById(R.id.inputValue);
         outputText = findViewById(R.id.outputValue);
+
         unitAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         PopulateUnits("Length");
+
         spinnerInputType.setAdapter(unitAdapter);
         spinnerOutputType.setAdapter(unitAdapter);
     }
 
-
-    public double convertLength(String inputUnit, String outputUnit, double value) {
-        double cm = 0.0;
-        // Convert input unit value to cm
-        switch (inputUnit.toLowerCase()) {
-            case "centimetres": cm = value;break;
-            case "inches": cm = value * 2.54;break;
-            case "feet": cm = value * 30.48;break;
-            case "yards": cm = value * 91.44;break;
-            case "miles": cm = value * 160934.4;break;
-            case "metres": cm = value * 100.0;break;
-            case "kilometres": cm = value * 100000.0;break;
-            default: cm = value;break;
+    public double convertFromUnitFactors(Map<String, Double> conversionFactors, String inputUnit, String outputUnit, double value) {
+        if(!conversionFactors.containsKey(inputUnit) || !conversionFactors.containsKey(outputUnit)){
+            throw new IllegalArgumentException("Unknown unit input ("+inputUnit+")/output ("+outputUnit+")");
         }
 
-        // Convert cm to output unit
-        switch (outputUnit.toLowerCase()) {
-            case "centimetres": return cm;
-            case "inches": return cm / 2.54;
-            case "feet": return cm / 30.48;
-            case "yard": return cm / 91.44;
-            case "mile": return cm / 160934.4;
-            case "metres": return cm / 100.0;
-            case "kilometres": return cm / 100000.0;
-            default: return cm;
-        }
-    }
+        double inputFactor = conversionFactors.get(inputUnit);
+        double outputFactor = conversionFactors.get(outputUnit);
 
-    public double convertWeight(String inputUnit, String outputUnit, double value) {
-        double grams = 0.0;
+        // Convert x unit to base value (cm or grams)
+        double normalisedValue = value * inputFactor;
 
-        // Convert input unit value to grams
-        switch (inputUnit.toLowerCase()) {
-            case "grams": grams = value;break;
-            case "kilograms": grams = value * 1000;break;
-            case "pounds": grams = value * 453.592;break;
-            case "ounces": grams = value * 28.3495;break;
-            case "ton": grams = value * 907185.8188;break;
-            default: grams = value;break;
-        }
-
-        // Convert grams to output unit
-        switch (outputUnit.toLowerCase()) {
-            case "grams": return grams;
-            case "kilograms": return grams / 1000;
-            case "pounds": return grams / 453.592;
-            case "ounces": return grams / 28.3495;
-            case "ton": return grams / 907185.8188;
-            default: return grams;
-        }
+        // Convert cm to output unit and return result
+        return normalisedValue / outputFactor;
     }
 
     public double convertTemperature(String inputUnit, String outputUnit, double value) {
@@ -182,9 +184,9 @@ public class MainActivity extends AppCompatActivity {
         double value = Double.parseDouble(inputValue);
         double result = 0.0;
         if(selectedUnitType == "Length"){
-            result = convertLength(inputUnit, outputUnit, value);
+            result = convertFromUnitFactors(lengthConversionFactors, inputUnit, outputUnit, value);
         }else if (selectedUnitType == "Weight"){
-            result = convertWeight(inputUnit, outputUnit, value);
+            result = convertFromUnitFactors(weightConversionFactors, inputUnit, outputUnit, value);
         }else if (selectedUnitType == "Temperature"){
             result = convertTemperature(inputUnit, outputUnit, value);
         }else{
@@ -208,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        InitConversionData();
         InitSpinners();
         focus = findViewById(R.id.focusableLayout);
 
