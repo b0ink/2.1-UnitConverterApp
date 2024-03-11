@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         // Force select input type
         if (!items.contains(inputUnit)) {
             spnInputUnitType.performClick();
-            if(printErrors) Toast.makeText(MainActivity.this, "Input unit required", Toast.LENGTH_SHORT).show();
+            if(printErrors) Toast.makeText(MainActivity.this, "Input unit type required", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -171,13 +171,14 @@ public class MainActivity extends AppCompatActivity {
         String inputValue = etInputValue.getText().toString();
         if (inputValue.isEmpty()) {
             etInputValue.requestFocus();
+            if(printErrors) Toast.makeText(MainActivity.this, "Input value required", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Force output unit type
         if (!items.contains(outputUnit)) {
             spnOutputUnitType.performClick();
-            if(printErrors) Toast.makeText(MainActivity.this, "Output unit required", Toast.LENGTH_SHORT).show();
+            if(printErrors) Toast.makeText(MainActivity.this, "Output unit type required", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         tlUnitCategory = findViewById(R.id.UnitTypeTab);
-        tlUnitCategory.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tlUnitCategory.addOnTabSelectedListener(new  TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 populateUnits((String)tab.getText());
