@@ -36,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private Map<String, Double> weightConversionFactors;
     private Map<String, Double> tempConversionFactors;
 
-    public void InitConversionData(){
+    Map<String, Map<String, Double>> unitCategories;
+
+
+    public void initConversionData(){
+
         lengthConversionFactors = new HashMap<>();
         lengthConversionFactors.put("Centimetres", 1.0);
         lengthConversionFactors.put("Metres", 100.0);
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         tempConversionFactors.put("Fahrenheit", 1.0);
         tempConversionFactors.put("Kelvin", 1.0);
 
+        unitCategories = new HashMap<>();
+        unitCategories.put("Length", lengthConversionFactors);
+        unitCategories.put("Weight", weightConversionFactors);
+        unitCategories.put("Temperature", tempConversionFactors);
     }
 
     Spinner spinnerInputType;
@@ -73,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayAdapter<String> unitAdapter;
 
-    public void PopulateUnits(String unitCategory) {
+    public void populateUnits(String unitCategory) {
         unitAdapter.clear();
 
         // use conversion map's keys as an array of strings
@@ -92,15 +100,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         unitAdapter.notifyDataSetChanged();
+        inputText.setText("");
+        outputText.setText("");
         spinnerInputType.setSelection(0);
         spinnerOutputType.setSelection(1);
         selectedUnitType = unitCategory;
-        inputText.setText("");
-        outputText.setText("");
+
         inputText.requestFocus();
     }
 
-    public void InitSpinners() {
+    public void initSpinners() {
         spinnerInputType = (Spinner) findViewById(R.id.conversionOptionsInput);
         spinnerOutputType = (Spinner) findViewById(R.id.conversionOptionsOutput);
 
@@ -110,15 +119,21 @@ public class MainActivity extends AppCompatActivity {
         unitAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        PopulateUnits("Length");
 
         spinnerInputType.setAdapter(unitAdapter);
         spinnerOutputType.setAdapter(unitAdapter);
+
+        populateUnits("Length");
+
     }
 
     public double convertFromUnitFactors(Map<String, Double> conversionFactors, String inputUnit, String outputUnit, double value) {
         if(!conversionFactors.containsKey(inputUnit) || !conversionFactors.containsKey(outputUnit)){
             throw new IllegalArgumentException("Unknown unit input ("+inputUnit+")/output ("+outputUnit+")");
+        }
+
+        if(conversionFactors.equals(tempConversionFactors)){
+            return convertTemperature(inputUnit, outputUnit, value);
         }
 
         double inputFactor = conversionFactors.get(inputUnit);
@@ -182,15 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         double value = Double.parseDouble(inputValue);
         double result = 0.0;
-        if(selectedUnitType == "Length"){
-            result = convertFromUnitFactors(lengthConversionFactors, inputUnit, outputUnit, value);
-        }else if (selectedUnitType == "Weight"){
-            result = convertFromUnitFactors(weightConversionFactors, inputUnit, outputUnit, value);
-        }else if (selectedUnitType == "Temperature"){
-            result = convertTemperature(inputUnit, outputUnit, value);
-        }else{
-            Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
-        }
+        result = convertFromUnitFactors(unitCategories.get(selectedUnitType), inputUnit, outputUnit, value);
 
         DecimalFormat df = new DecimalFormat("#.#####");
         outputText.setText(df.format(result));
@@ -210,8 +217,9 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        InitConversionData();
-        InitSpinners();
+
+        initConversionData();
+        initSpinners();
 
         focus = findViewById(R.id.focusableLayout);
         convertBtn = findViewById(R.id.convertBtn);
@@ -249,21 +257,13 @@ public class MainActivity extends AppCompatActivity {
         unitTypeSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int unitType = tab.getPosition();
-                // if unitType == 0: unit = length
-                // if unitType == 1: unit = weight
-                // if unitType == 2: unit = temperature
-                List<String> categories = Arrays.asList("Length", "Weight", "Temperature");
-                PopulateUnits(categories.get(unitType));
+                populateUnits((String)tab.getText());
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) {}
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
     }
