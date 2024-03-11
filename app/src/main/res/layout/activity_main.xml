@@ -24,7 +24,7 @@
         app:tabIndicatorColor="#FFFFFF"
         app:tabIndicatorHeight="5dp"
         app:tabSelectedTextColor="#FFFFFF"
-        app:tabTextColor="#024162">
+        app:tabTextColor="#05324A">
 
 
         <com.google.android.material.tabs.TabItem
