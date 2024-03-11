@@ -1,12 +1,10 @@
 package com.example.unitconverter;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,11 +15,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
@@ -29,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.HashMap;
 import java.util.Map;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Invalid unit category: " + unitCategory);
         }
 
-        unitAdapter.addAll(unitCategories.get(unitCategory).keySet().toArray(new String[0]));
+        unitAdapter.addAll(Objects.requireNonNull(unitCategories.get(unitCategory)).keySet().toArray(new String[0]));
 
         unitAdapter.notifyDataSetChanged();
         etInputValue.setText("");
@@ -98,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initSpinners() {
-        spnInputUnitType = (Spinner) findViewById(R.id.conversionOptionsInput);
-        spnOutputUnitType = (Spinner) findViewById(R.id.conversionOptionsOutput);
+        spnInputUnitType = findViewById(R.id.conversionOptionsInput);
+        spnOutputUnitType = findViewById(R.id.conversionOptionsOutput);
 
         etInputValue = findViewById(R.id.inputValue);
         etOutputValue = findViewById(R.id.outputValue);
@@ -124,8 +120,12 @@ public class MainActivity extends AppCompatActivity {
             return convertTemperature(inputUnit, outputUnit, value);
         }
 
-        double inputFactor = conversionFactors.get(inputUnit);
-        double outputFactor = conversionFactors.get(outputUnit);
+        Double inputFactor = conversionFactors.get(inputUnit);
+        Double outputFactor = conversionFactors.get(outputUnit);
+
+        if(inputFactor == null || outputFactor == null){
+            throw new IllegalArgumentException("Invalid unit factors");
+        }
 
         // Convert x unit to base value (cm or grams)
         double normalisedValue = value * inputFactor;
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public double convertTemperature(String inputUnit, String outputUnit, double value) {
-        double result = 0.0;
+        double result;
 
         // Convert input unit value to Celsius
         switch (inputUnit.toLowerCase()) {
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         String inputUnit = spnInputUnitType.getSelectedItem().toString();
         String outputUnit = spnOutputUnitType.getSelectedItem().toString();
 
-        ArrayList<String> items = new ArrayList<String>();
+        ArrayList<String> items = new ArrayList<>();
         for (int i = 0; i < unitAdapter.getCount(); i++) {
             items.add(unitAdapter.getItem(i));
         }
@@ -184,11 +184,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         double value = Double.parseDouble(inputValue);
-        double result = 0.0;
-        result = convertFromUnitFactors(unitCategories.get(selectedUnitType), inputUnit, outputUnit, value);
+        double result;
+        if(unitCategories.containsKey(selectedUnitType)){
+            result = convertFromUnitFactors(Objects.requireNonNull(unitCategories.get(selectedUnitType)), inputUnit, outputUnit, value);
 
-        DecimalFormat df = new DecimalFormat("#.#####");
-        etOutputValue.setText(df.format(result));
+            DecimalFormat df = new DecimalFormat("#.#####");
+            etOutputValue.setText(df.format(result));
+        }
 
         etInputValue.clearFocus();
         etOutputValue.requestFocus();
