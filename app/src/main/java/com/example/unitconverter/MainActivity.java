@@ -32,16 +32,11 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Map<String, Double> lengthConversionFactors;
-    private Map<String, Double> weightConversionFactors;
-    private Map<String, Double> tempConversionFactors;
-
     Map<String, Map<String, Double>> unitCategories;
-
 
     public void initConversionData(){
 
-        lengthConversionFactors = new HashMap<>();
+        Map<String, Double> lengthConversionFactors = new HashMap<>();
         lengthConversionFactors.put("Centimetres", 1.0);
         lengthConversionFactors.put("Metres", 100.0);
         lengthConversionFactors.put("Kilometres", 100000.0);
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         lengthConversionFactors.put("Yards", 91.44);
         lengthConversionFactors.put("Miles", 160934.4);
 
-        weightConversionFactors = new HashMap<>();
+        Map<String, Double> weightConversionFactors = new HashMap<>();
         weightConversionFactors.put("Grams", 1.0);
         weightConversionFactors.put("Kilograms", 1000.0);
         weightConversionFactors.put("Pounds", 453.592);
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // temp conversion too complicated to store formula in map
-        tempConversionFactors = new HashMap<>();
+        Map<String, Double> tempConversionFactors = new HashMap<>();
         tempConversionFactors.put("Celsius", 1.0);
         tempConversionFactors.put("Fahrenheit", 1.0);
         tempConversionFactors.put("Kelvin", 1.0);
@@ -124,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Unknown unit input ("+inputUnit+")/output ("+outputUnit+")");
         }
 
-        if(conversionFactors.equals(tempConversionFactors)){
+        if(conversionFactors.containsKey("Celsius")){
             return convertTemperature(inputUnit, outputUnit, value);
         }
 
