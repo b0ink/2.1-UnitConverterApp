@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         // Convert x unit to base value (cm or grams)
         double normalisedValue = value * inputFactor;
 
-        // Convert cm to output unit and return result
+        // Convert normalised value to output unit and return result
         return normalisedValue / outputFactor;
     }
 
