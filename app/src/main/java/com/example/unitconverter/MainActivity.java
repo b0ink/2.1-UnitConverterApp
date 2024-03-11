@@ -28,6 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -193,7 +194,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
         }
 
-        outputText.setText(Double.toString(result));
+        DecimalFormat df = new DecimalFormat("#.#####");
+        outputText.setText(df.format(result));
 
         inputText.clearFocus();
         outputText.requestFocus();
