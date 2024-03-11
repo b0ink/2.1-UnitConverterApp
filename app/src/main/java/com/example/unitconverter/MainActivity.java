@@ -3,7 +3,6 @@ package com.example.unitconverter;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.Toast;
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnConvert;
     EditText etInputValue;
     EditText etOutputValue;
-    LinearLayout focus;
     TabLayout tlUnitCategory;
 
     String selectedUnitType;
@@ -210,8 +208,6 @@ public class MainActivity extends AppCompatActivity {
 
         initConversionData();
         initSpinners();
-
-        focus = findViewById(R.id.focusableLayout);
 
         // Handle conversion on button click
         btnConvert = findViewById(R.id.convertBtn);
