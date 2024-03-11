@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Convert input unit value to Celsius
         switch (inputUnit.toLowerCase()) {
-            case "celsius": result = value; break;
             case "fahrenheit": result = (value - 32) * 5 / 9; break;
             case "kelvin": result = value - 273.15; break;
             default: result = value; break;
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Convert Celsius to output unit
         switch (outputUnit.toLowerCase()) {
-            case "celsius": return result;
             case "fahrenheit": return (result * 9 / 5) + 32;
             case "kelvin": return result + 273.15;
             default: return result;
