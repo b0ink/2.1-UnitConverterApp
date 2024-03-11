@@ -212,29 +212,28 @@ public class MainActivity extends AppCompatActivity {
 
         InitConversionData();
         InitSpinners();
-        focus = findViewById(R.id.focusableLayout);
 
+        focus = findViewById(R.id.focusableLayout);
         convertBtn = findViewById(R.id.convertBtn);
 
-        spinnerInputType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        AdapterView.OnItemSelectedListener spinnerItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                doConversion(false);
+                if (parentView == spinnerInputType) {
+                    doConversion(false);
+                } else if (parentView == spinnerOutputType) {
+                    doConversion(true);
+                }
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
 
-        spinnerOutputType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                doConversion(true);
-            }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
+
             }
-        });
+        };
+
+        spinnerInputType.setOnItemSelectedListener(spinnerItemSelectedListener);
+        spinnerOutputType.setOnItemSelectedListener(spinnerItemSelectedListener);
 
         convertBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -242,13 +241,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Handle button click
                 doConversion(true);
-//                focus.requestFocus();
             }
         });
 
 
         unitTypeSelector = findViewById(R.id.UnitTypeTab);
-
         unitTypeSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
