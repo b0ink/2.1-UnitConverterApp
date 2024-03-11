@@ -85,19 +85,11 @@ public class MainActivity extends AppCompatActivity {
         unitAdapter.clear();
 
         // use conversion map's keys as an array of strings
-        switch (unitCategory) {
-            case "Length":
-                unitAdapter.addAll(lengthConversionFactors.keySet().toArray(new String[0]));
-                break;
-            case "Weight":
-                unitAdapter.addAll(weightConversionFactors.keySet().toArray(new String[0]));
-                break;
-            case "Temperature":
-                unitAdapter.addAll(tempConversionFactors.keySet().toArray(new String[0]));
-                break;
-            default:
-                break;
+        if(!unitCategories.containsKey(unitCategory)){
+            throw new IllegalArgumentException("Invalid unit category: " + unitCategory);
         }
+
+        unitAdapter.addAll(unitCategories.get(unitCategory).keySet().toArray(new String[0]));
 
         unitAdapter.notifyDataSetChanged();
         inputText.setText("");
@@ -222,7 +214,10 @@ public class MainActivity extends AppCompatActivity {
         initSpinners();
 
         focus = findViewById(R.id.focusableLayout);
+
+        // Handle conversion on button click
         convertBtn = findViewById(R.id.convertBtn);
+        convertBtn.setOnClickListener(v -> doConversion(true));
 
         AdapterView.OnItemSelectedListener spinnerItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
@@ -242,15 +237,6 @@ public class MainActivity extends AppCompatActivity {
 
         spinnerInputType.setOnItemSelectedListener(spinnerItemSelectedListener);
         spinnerOutputType.setOnItemSelectedListener(spinnerItemSelectedListener);
-
-        convertBtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
-                // Handle button click
-                doConversion(true);
-            }
-        });
 
 
         unitTypeSelector = findViewById(R.id.UnitTypeTab);
